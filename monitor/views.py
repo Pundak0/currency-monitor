@@ -21,6 +21,8 @@ def chart_view(request):
         currency = form.cleaned_data['currency']
         period = int(form.cleaned_data['period'])
 
+        print(f"Выбрана валюта: {currency.code}, период: {period}")
+
         # Сохраняем запрос пользователя
         if request.user.is_authenticated:
             UserQuery.objects.create(
@@ -37,9 +39,13 @@ def chart_view(request):
 
         # Получаем данные и строим график
         rates = get_historical_rates(currency.code, period)
+        print(f"Получены курсы: {rates}")
 
         if rates:
             chart_data = generate_currency_chart(rates, currency.code)
+            print(f"chart_data получен: {chart_data is not None}")
+            if chart_data:
+                print(f"Ключи chart_data: {chart_data.keys()}")
         else:
             error_message = "Не удалось получить данные о курсе валюты. Попробуйте позже."
 
