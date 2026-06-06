@@ -1,0 +1,35 @@
+{% extends 'monitor/base.html' %}
+
+{% block title %}Главная - Валютный монитор{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">📊 Анализ курса валют</h4>
+            </div>
+            <div class="card-body">
+                <form method="get" action="{% url 'monitor:chart' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ form.currency.id_for_label }}" class="form-label">Валюта</label>
+                        {{ form.currency }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.period.id_for_label }}" class="form-label">Период</label>
+                        {{ form.period }}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">📈 Показать график</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body text-center text-muted">
+                <small>Выберите валюту и период, чтобы увидеть динамику курса и аналитику.</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

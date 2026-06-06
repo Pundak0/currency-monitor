@@ -1,0 +1,67 @@
+{% extends 'monitor/base.html' %}
+
+{% block title %}График курса валюты{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">🔍 Параметры</h5>
+            </div>
+            <div class="card-body">
+                <form method="get" action="{% url 'monitor:chart' %}">
+                    <div class="mb-3">
+                        <label for="{{ form.currency.id_for_label }}" class="form-label">Валюта</label>
+                        {{ form.currency }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.period.id_for_label }}" class="form-label">Период</label>
+                        {{ form.period }}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Обновить</button>
+                </form>
+            </div>
+        </div>
+
+        {% if chart_data %}
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">📈 Аналитика</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Текущий курс:</strong> {{ chart_data.current_rate|floatformat:2 }} ₽</p>
+                <p><strong>Минимум:</strong> {{ chart_data.min_rate|floatformat:2 }} ₽</p>
+                <p><strong>Максимум:</strong> {{ chart_data.max_rate|floatformat:2 }} ₽</p>
+                <p><strong>Средний:</strong> {{ chart_data.avg_rate|floatformat:2 }} ₽</p>
+                <hr>
+                <p><strong>Изменение:</strong> 
+                    {% if chart_data.change > 0 %}
+                        <span class="text-success">+{{ chart_data.change|floatformat:2 }} ₽ ({{ chart_data.change_percent|floatformat:1 }}%)</span>
+                    {% else %}
+                        <span class="text-danger">{{ chart_data.change|floatformat:2 }} ₽ ({{ chart_data.change_percent|floatformat:1 }}%)</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-9">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">📉 Динамика курса</h5>
+            </div>
+            <div class="card-body text-center">
+                {% if error_message %}
+                    <div class="alert alert-danger">{{ error_message }}</div>
+                {% elif chart_data %}
+                    <img src="{{ chart_data.image }}" alt="График курса валюты" class="img-fluid">
+                {% else %}
+                    <p class="text-muted">Выберите валюту и период, чтобы увидеть график.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'monitor/base.html' %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">👤 Личный кабинет: {{ user.username }}</h4>
+            </div>
+            <div class="card-body">
+                <h5>История запросов (последние 10)</h5>
+                {% if user_queries %}
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Валюта</th>
+                                <th>Период</th>
+                                <th>Дата запроса</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for query in user_queries %}
+                            <tr>
+                                <td>{{ query.currency.code }} - {{ query.currency.name }}</td>
+                                <td>{{ query.period_days }} дней</td>
+                                <td>{{ query.query_date|date:"d.m.Y H:i" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="text-muted">У вас пока нет запросов. Перейдите на главную страницу и выберите валюту.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
