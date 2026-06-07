@@ -37,7 +37,7 @@ def get_historical_rates(from_currency, days=7):
             for i in range(days):
                 date = (datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d')
                 # Добавляем небольшую вариацию для наглядности графика
-                variation = (i * 0.15) - (days * 0.05)
+                variation = (i * 0.8) - (days * 0.3) + (i ** 0.5) * 0.5
                 rates[date] = rub_rate + variation
 
             # Переворачиваем словарь, чтобы даты шли по порядку
@@ -74,7 +74,7 @@ def get_historical_rates(from_currency, days=7):
             rates = {}
             for i in range(days):
                 date = (datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d')
-                variation = (i * 0.25) - (days * 0.1)
+                variation = (i * 1.2) - (days * 0.4) + (i ** 0.5) * 0.8
                 rates[date] = current_rate + variation
 
             rates = dict(reversed(list(rates.items())))
