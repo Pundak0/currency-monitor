@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import CurrencyForm
+from django.contrib.auth import login
+from .forms import CurrencyForm, RegisterForm
 from .utils import get_historical_rates, generate_currency_chart
 from .models import UserQuery, Currency
 
@@ -44,8 +45,6 @@ def chart_view(request):
         if rates:
             chart_data = generate_currency_chart(rates, currency.code)
             print(f"chart_data получен: {chart_data is not None}")
-            if chart_data:
-                print(f"Ключи chart_data: {chart_data.keys()}")
         else:
             error_message = "Не удалось получить данные о курсе валюты. Попробуйте позже."
 
@@ -63,3 +62,16 @@ def profile(request):
     return render(request, 'monitor/profile.html', {
         'user_queries': user_queries
     })
+
+
+def register(request):
+    """Регистрация нового пользователя"""
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('monitor:index')
+    else:
+        form = RegisterForm()
+    return render(request, 'monitor/register.html', {'form': form})
