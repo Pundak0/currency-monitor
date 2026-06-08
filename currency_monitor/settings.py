@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -120,3 +120,13 @@ STATIC_URL = 'static/'
 # Перенаправление после входа и выхода
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+# Универсальная настройка STATIC_ROOT
+if os.environ.get('PYTHONANYWHERE_DOMAIN'):
+    # Мы на PythonAnywhere
+    STATIC_ROOT = '/home/Pundak0/currency-monitor/staticfiles'
+    ALLOWED_HOSTS = ['Pundak0.pythonanywhere.com', '127.0.0.1']
+else:
+    # Локальная разработка (ваш компьютер)
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
